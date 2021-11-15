@@ -127,8 +127,8 @@ int main(int argc, char ** argv)
 #endif
 
 	int plaintext_length = strlen((const char *)plaintext);
-	unsigned char * ciphertext = calloc((plaintext_length + 16 - plaintext_length % 16) * 2, 1);
-	int ciphertext_length = encrypt_aes_ecb(plaintext, plaintext_length, key, ciphertext);
+	unsigned char * ciphertext = calloc((plaintext_length + 16 - plaintext_length % 16) * 2, 1);  // strlen(ciphertext) == 64
+	int ciphertext_length = encrypt_aes_ecb(plaintext, plaintext_length, key, ciphertext);     //ciphertext_length =32
 
 #ifdef DEBUG
 	unsigned char * expected = "\xe4\x40\x85\xfa\x2b\xda\x33\xd8\x6a\xa3\x40"
