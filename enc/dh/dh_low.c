@@ -12,8 +12,13 @@
  * openssl pkey -in dhkey2.pem -text -noout              #check the key file
  * openssl pkey -in dhkey1.pem -pubout -out dhpub1.pem   #extrace pub key
  *
- * -- after exchange, get the shared secret --
+ * -- exchange, then get shared secret --
  * openssl pkeyutl -derive -inkey dhkey1.pem -peerkey dhpub2.pem -out secret1.bin
+ *
+ * -- use the shared secret to communication
+ * openssl enc -aes256 -base64 -k $(base64 secret1.bin) -e -in plain.txt -out cipher.txt
+ * openssl enc -aes256 -base64 -k $(base64 secret1.bin) -d -in cipher.txt -out plain_again.txt
+ * 
  */
 
 int	main()

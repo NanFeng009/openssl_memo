@@ -1,12 +1,12 @@
 /*
- * #generate the private and public key
+ * #alice generate the private & public key
  * openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_pubexp:3 -pkeyopt rsa_keygen_bits:1024 -out privkey-alice.pem
- * #view the private and public key
+ * #view the private & public key
  * openssl pkey -in privkey-alice.pem -text
- * #output the public key to a file
+ * #extrace the public key to a file
  * openssl pkey -in privkey-alice.pem -out pubkey-alice.pem -pubout
  *
- * #generate message file
+ * #alice generate and sign message file
  * printf "This is alice example message" >>message-alice.txt
  * #calculate the hash and then sign it (RSA_sign)
  * openssl dgst -sha1 -sign privkey-alice.pem -out sign-alice.bin message-alice.txt
@@ -15,7 +15,7 @@
  * openssl pkeyutl -encrypt -in message-alice.txt -pubin pubkey-bob.pem -out ciphertext-alice.bin
  *
  *
- * #generate the private and public key
+ * #Bob generate the private and public key
  * openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_pubexp:3 -pkeyopt rsa_keygen_bits:1024 -out privkey-bob.pem
  * #view the private and public key
  * openssl pkey -in privkey-bob.pem -text
@@ -23,7 +23,7 @@
  * openssl pkey -in privkey-bob.pem -out pubkey-bob.pem -pubout
  *
  *
- * #decrypt message file and verify
+ * #Bob decrypt message file and verify
  * openssl pkeyutl -decrypt -in ciphertext-alice.bin -inkey privkey-bob.pem -out received-alice.txt
  * openssl dgst -sha1 -verify pubkey-alice.pem -signature sign-alice.bin received-alice.txt
  */
