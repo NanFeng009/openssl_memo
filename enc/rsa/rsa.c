@@ -10,7 +10,7 @@
  * #alice generate and sign message file
  * printf "This is alice example message" >>message-alice.txt
  * #calculate the hash and then sign it(1. get hash(openssl dgst -sha1 message-ID.txt), 2. encrypt)
- * openssl dgst -sha1 -sign privkey-alice.pem -out sign-alice.bin message-alice.txt
+ * openssl dgst -sha1 -sign privkey-alice.pem -out signature-alice.bin message-alice.txt
  * #encrypt the message using Bob's public key,
  * #Note that direct RSA encryption should only be used on small files, with length less than the length of the key
  * openssl pkeyutl -encrypt -in message-alice.txt -pubin pubkey-bob.pem -out ciphertext-alice.bin
@@ -26,7 +26,7 @@
  *
  * #Bob decrypt message file and verify
  * openssl pkeyutl -decrypt -in ciphertext-alice.bin -inkey privkey-bob.pem -out received-alice.txt
- * openssl dgst -sha1 -verify pubkey-alice.pem -signature sign-alice.bin received-alice.txt
+ * openssl dgst -sha1 -verify pubkey-alice.pem -signature signature-alice.bin received-alice.txt
  */
 
 #include <stdlib.h>

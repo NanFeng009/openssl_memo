@@ -1,0 +1,8 @@
+ecdsa private key in hex
+	HEX(W)
+ecdsa public key in hex
+	04||HEX(x)||HEX(y)
+ecdsa signature
+	r||s
+
+
