@@ -5,7 +5,7 @@
 
 
 /*
- * openssl mac -cipher AES-128-CBC -macopt hexkey:c4654ef3f858b84d090e6b23abbf2521  -in msg.bin CMAC
+ * openssl mac -cipher AES-128-CBC -macopt hexkey:c4654ef3f858b84d090e6b23abbf2521  -in msg.raw CMAC
  *
  * gcc -g aes_cmac.c -lcrypto
  */
@@ -32,6 +32,11 @@ int main()
 
 		if(!CMAC_Final((CMAC_CTX*)pState, (unsigned char*)p_mac, &mactlen))
 			break;
+
+		for(int i = 0; i < mactlen; i++){
+			printf("%02x", p_mac[i]);
+		}
+		printf("\n");
 
 	}while(0);
 

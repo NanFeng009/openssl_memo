@@ -1,4 +1,5 @@
 /*
+ * https://sandilands.info/sgordon/public-key-encryption-and-digital-signatures-using-openssl 
  * #alice generate the private & public key
  * openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_pubexp:3 -pkeyopt rsa_keygen_bits:1024 -out privkey-alice.pem
  * #view the private & public key
@@ -8,7 +9,7 @@
  *
  * #alice generate and sign message file
  * printf "This is alice example message" >>message-alice.txt
- * #calculate the hash and then sign it (RSA_sign)
+ * #calculate the hash and then sign it(1. get hash(openssl dgst -sha1 message-ID.txt), 2. encrypt)
  * openssl dgst -sha1 -sign privkey-alice.pem -out sign-alice.bin message-alice.txt
  * #encrypt the message using Bob's public key,
  * #Note that direct RSA encryption should only be used on small files, with length less than the length of the key
