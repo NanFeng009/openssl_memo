@@ -3,8 +3,10 @@
  *openssl genrsa -out pri.pem 3072
  *# generate corresponding public key
  *openssl rsa -in pri.pem -pubout -out pub.pem
- *# view key
+ *# view private key
  *openssl pkey -in pri.pem -text -noout
+ *# view public key
+ *openssl rsa -pubin -in pub.pem -text -noout
  *
  *
  *# create a self-signed certificate
