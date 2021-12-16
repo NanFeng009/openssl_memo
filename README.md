@@ -32,3 +32,13 @@ Transforms can take one type of encoded certificate to another. (ie. PEM To DER 
 
 - more example can be found in here
 sdk/tlibcrypto/sgxssl
+
+
+# Random data file
+head -c 1073741824 </dev/urandom >myfile
+dd if=/dev/urandom of=sample.txt bs=1G count=1
+dd bs=1024 count=1048576 </dev/urandom >myfile
+
+size=$( echo 1G | numfmt --from=iec )         # 1 G ==> 1073741824
+openssl rand -out myfile "$size"
+openssl rand -base64 -out myfile "$size"
