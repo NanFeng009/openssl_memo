@@ -13,7 +13,7 @@
  * openssl dgst -sha1 -sign privkey-alice.pem -out signature-alice.bin message-alice.txt
  * #encrypt the message using Bob's public key,
  * #Note that direct RSA encryption should only be used on small files, with length less than the length of the key
- * openssl pkeyutl -encrypt -in message-alice.txt -pubin pubkey-bob.pem -out ciphertext-alice.bin
+ * openssl pkeyutl -encrypt -in message-alice.txt -pubin -inkey pubkey-bob.pem -out ciphertext-alice.bin
  *
  *
  * #Bob generate the private and public key
