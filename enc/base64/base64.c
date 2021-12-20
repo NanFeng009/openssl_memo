@@ -1,5 +1,11 @@
 /*
  *
+ *#base64 encoding & decoding
+ *openssl enc -base64 -in text.plain -out text.base64
+ *openssl enc -base64 -d -in text.base64 -out text.plain
+ *
+ *
+ *
  *printf "Hello world"|openssl base64
  *
 */

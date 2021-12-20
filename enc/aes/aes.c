@@ -1,20 +1,21 @@
 /*
- *#generate AES keys and password
+ *-------------------method 1 ---------------------
+ *#generate a secret key (as well as an initialisation vector)
  *openssl enc -aes-128-cbc -pbkdf2 -k intel -P
  *
  *#use k and iv from above step
  *openssl enc -aes-128-cbc -pbkdf2 -in un_encrypted.data -out un_encrypted.data.raw -K 5EFF664AB003DEEAB8318F83C12A75D3 -iv 13F8D912AD97D25DB3A6636A44B54B68
+ *openssl enc -d -aes-128-cbc -pbkdf2 -in un_encrypted.data -out un_encrypted.data.raw -K 5EFF664AB003DEEAB8318F83C12A75D3 -iv 13F8D912AD97D25DB3A6636A44B54B68
  *
- *#base64 encoding & decoding
- *openssl enc -base64 -in text.plain -out text.base64
- *openssl enc -base64 -d -in text.base64 -out text.plain
- *
+ *-------------------method 2 ---------------------
  *#aes encryption & decryption with prompted password
- *openssl enc -aes-128-cbc -pbkdf2 -in text.plain -out text.raw
- *openssl enc -aes-128-cbc -pbkdf2 -base64 -in text.plain -out text.raw.base64
+ *openssl enc -e -aes-128-cbc -pbkdf2 -in text.plain -out text.raw
+ *openssl enc -d -aes-128-cbc -pbkdf2 -in text.raw -out text.raw.base64
+
+ *-------------------method 3 ---------------------
  *#aes encryption & decryption with supplied password
- *openssl enc -aes-128-cbc -pbkdf2 -base64 -in text.plain -out text.raw.base64 -pass pass:password
- *openssl enc -aes-128-cbc -pbkdf2 -base64 -in text.plain -out text.raw.base64 -pass file:passfile
+ *openssl enc -e -aes-128-cbc -pbkdf2 -base64 -in text.plain -out text.raw.base64 -pass pass:password
+ *openssl enc -d -aes-128-cbc -pbkdf2 -base64 -in text.raw.base64 -out text.raw.base64.plain -pass file:passfile
  *
  */
 
