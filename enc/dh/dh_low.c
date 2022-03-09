@@ -8,9 +8,12 @@
 /*
  * openssl genpkey -genparam -algorithm DH -out dhp.pem  #Generate the Diffie-Hellman global public parameters
  * openssl pkeyparam -in dhp.pem -text   				 #check parameter
+ * openssl dhparam -in dhp.pem -check -text              #check parameter and display
  * openssl genpkey -paramfile dhp.pem -out dhkey1.pem    #generate private and public key
- * openssl pkey -in dhkey2.pem -text -noout              #check the key file
- * openssl pkey -in dhkey1.pem -pubout -out dhpub1.pem   #extrace pub key
+ * openssl pkey -in dhkey1.pem -text -noout              #check the key file
+ * openssl genpkey -paramfile dhp.pem -out dhkey2.pem    #generate private and public key for peer
+ * openssl pkey -in dhkey2.pem -pubout -out dhpub2.pem   #extrace pub key
+ * openssl pkey -pubin -in dhpub1.pem -text -noout       #check the public key file
  *
  * -- exchange, then get shared secret --
  * openssl pkeyutl -derive -inkey dhkey1.pem -peerkey dhpub2.pem -out secret1.bin
