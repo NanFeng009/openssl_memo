@@ -25,12 +25,11 @@
  * openssl enc -aes256 -base64 -k $(base64 bob_shared_secret.bin) -d -in cipher.txt -out plain_again.txt
  *
  */
-// to use 192 bits curve compile with -DUSE_192
-// or -DUSE_256 for 256 bits curve
+// to use 192 bits curve compile with -DUSE_192 or -DUSE_256 for 256 bits curve
 // to use predefined points use -DUSE_PREDEFINED_POINTS or draft curve params will be used
 // to create new private and public key use -DGENERATE_KEY otherwise embedded keys will be used
 // link with -lssl -lcrypto
-// -- ex.  gcc ecc_sample.c -g -o ecc_sample -lssl -lcrypto -DUSE_256 -DUSE_PREDEFINED_POINTS -DGENERATE_KEY
+// gcc ecc_sample.c -g -o ecc_sample -lssl -lcrypto -DUSE_256 -DUSE_PREDEFINED_POINTS -DGENERATE_KEY
 
 #include <string.h>
 #include <openssl/ec.h>      // for EC_GROUP_new_by_curve_name, EC_GROUP_free, EC_KEY_new, EC_KEY_set_group, EC_KEY_generate_key, EC_KEY_free

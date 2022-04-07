@@ -5,4 +5,11 @@ ecdsa public key in hex
 ecdsa signature
 	r||s
 
-
+https://andrea.corbellini.name/2015/05/30/elliptic-curve-cryptography-ecdh-and-ecdsa/
+Domain parameters:
+The prime <p> that specifies the size of the finite field.
+The coefficients <a> and <b> of the elliptic curve equation.
+The base point <G> that generates our subgroup.
+The order <n> of the subgroup.
+The cofactor <h> of the subgroup.
+In conclusion, the domain parameters for our algorithms are the sextuple <p,a,b,G,n,h>.
