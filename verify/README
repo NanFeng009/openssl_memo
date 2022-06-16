@@ -1,0 +1,22 @@
+# certificate chain with following componenents:
+
+Root Certificate - Intermediate Certificate - User Certificate
+# openssl command to verify cert chain
+# -untrusted for imtermediate cert
+# -CAfile    for root cert
+openssl verify -show_chain -CAfile RootCert.pem -untrusted Intermediate.pem UserCert.pem
+
+#verify cert against ocsp
+openssl ocsp -issuer r3.cer -cert cert.pem -text -url http://r3.o.lencr.org
+openssl ocsp -issuer r3.cer -cert cert.pem -text -url http://r3.o.lencr.org
+
+#verify cert against crl
+openssl x509 -noout -text -in intermediate.pem | grep -A 4 'X509v3 CRL Distribution Points'
+wget --no-check-certificate -O intermediate.pem.crl https://xxx.com
+cat cat intermediate.pem.crl root.pem >root_crl.pem
+openssl verify -crl_check -show_chain -CAfile root_crl.pem intermediate.pem
+
+#verfiy cert against private key
+openssl rsa -modulus -noout -in key.pem | openssl sha256
+openssl x509 -modulus -noout -in cert.pem | openssl sha256
+
