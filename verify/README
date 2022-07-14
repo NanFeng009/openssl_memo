@@ -6,6 +6,9 @@ Root Certificate - Intermediate Certificate - User Certificate
 # -CAfile    for root cert
 openssl verify -show_chain -CAfile RootCert.pem -untrusted Intermediate.pem UserCert.pem
 
+Partial verify, not complete cert chain
+openssl verify -partial_chain  -trusted intermediate.pem leaf.pem
+
 #verify cert against ocsp
 openssl ocsp -issuer r3.cer -cert cert.pem -text -url http://r3.o.lencr.org
 openssl ocsp -issuer r3.cer -cert cert.pem -text -url http://r3.o.lencr.org
