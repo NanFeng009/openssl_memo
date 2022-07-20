@@ -14,10 +14,8 @@ openssl ocsp -issuer r3.cer -cert cert.pem -text -url http://r3.o.lencr.org
 openssl ocsp -issuer r3.cer -cert cert.pem -text -url http://r3.o.lencr.org
 
 #verify cert against crl
-openssl x509 -noout -text -in intermediate.pem | grep -A 4 'X509v3 CRL Distribution Points'
-wget --no-check-certificate -O intermediate.pem.crl https://xxx.com
-cat cat intermediate.pem.crl root.pem >root_crl.pem
-openssl verify -crl_check -show_chain -CAfile root_crl.pem intermediate.pem
+cat intermediate.pem intermediate_crl.pem root.pem root_crl.pem >chain_crl.pem
+openssl verify -crl_check_all -show_chain -CAfile chain_crl.pem leaf.pem
 
 #verfiy cert against private key
 openssl rsa -modulus -noout -in key.pem | openssl sha256
