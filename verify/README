@@ -1,3 +1,4 @@
+#################################################################################################
 # certificate chain with following componenents:
 
 Root Certificate - Intermediate Certificate - User Certificate
@@ -20,4 +21,38 @@ openssl verify -crl_check_all -show_chain -CAfile chain_crl.pem leaf.pem
 #verfiy cert against private key
 openssl rsa -modulus -noout -in key.pem | openssl sha256
 openssl x509 -modulus -noout -in cert.pem | openssl sha256
+#################################################################################################
 
+# check Sha256 Ecdsa Signature
+1. 从public key 中得到2个点 X&Y
+2. 生成一个新的椭圆曲线
+3. 使用步骤1中的2个点在椭圆曲线上生成一个point
+4. 使用步骤4中的point生成一个EC_KEY
+5. 把EC_KEY 转换为EVP_KEY格式
+6. 从signature中得到2个点 R&S
+7. 用步骤6中的2个点生成ecdsa sig
+8. 把步骤7中的ecdsa sig 转换为der 格式
+9. verify signature 
+
+#################################################################################################
+# SGX quote: certificate chain with following componenents:
+
+Root Certificate - Intermediate Certificate - User Certificate
+# openssl command to verify cert chain
+# -untrusted for imtermediate cert
+# -CAfile    for root cert
+openssl verify -show_chain -CAfile RootCert.pem -untrusted Intermediate.pem UserCert.pem
+
+#verify cert against ocsp
+openssl ocsp -issuer r3.cer -cert cert.pem -text -url http://r3.o.lencr.org
+openssl ocsp -issuer r3.cer -cert cert.pem -text -url http://r3.o.lencr.org
+
+#verify cert against crl
+openssl x509 -noout -text -in intermediate.pem | grep -A 4 'X509v3 CRL Distribution Points'
+wget --no-check-certificate -O intermediate.pem.crl https://xxx.com
+cat cat intermediate.pem.crl root.pem >root_crl.pem
+openssl verify -crl_check -show_chain -CAfile root_crl.pem intermediate.pem
+
+#verfiy cert against private key
+openssl rsa -modulus -noout -in key.pem | openssl sha256
+openssl x509 -modulus -noout -in cert.pem | openssl sha256

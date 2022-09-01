@@ -15,6 +15,9 @@
  * #view the public key
  * openssl pkey -in alice_pub_key.pem -pubin
  * 
+ * openssl ecparam -name secp256k1 -genkey -noout -out bob_priv_key.pem
+ * openssl ec -in bob_priv_key.pem -pubout -out bob_pub_key.pem
+ *
  * # Alice & Bob derive the shared secret
  * openssl pkeyutl -derive -inkey alice_priv_key.pem -peerkey bob_pub_key.pem -out alice_shared_secret.bin
  * openssl pkeyutl -derive -inkey bob_priv_key.pem -peerkey alice_pub_key.pem -out bob_shared_secret.bin
@@ -25,11 +28,11 @@
  * openssl enc -aes256 -base64 -k $(base64 bob_shared_secret.bin) -d -in cipher.txt -out plain_again.txt
  *
  */
-// to use 192 bits curve compile with -DUSE_192 or -DUSE_256 for 256 bits curve
 // to use predefined points use -DUSE_PREDEFINED_POINTS or draft curve params will be used
 // to create new private and public key use -DGENERATE_KEY otherwise embedded keys will be used
 // link with -lssl -lcrypto
-// gcc ecc_sample.c -g -o ecc_sample -lssl -lcrypto -DUSE_256 -DUSE_PREDEFINED_POINTS -DGENERATE_KEY
+// gcc ecdh.c -g -o ecc_sample -lssl -lcrypto -DUSE_PREDEFINED_POINTS 
+// gcc ecdh.c -g -o ecc_sample -lssl -lcrypto -DGENERATE_KEY
 
 #include <string.h>
 #include <openssl/ec.h>      // for EC_GROUP_new_by_curve_name, EC_GROUP_free, EC_KEY_new, EC_KEY_set_group, EC_KEY_generate_key, EC_KEY_free
@@ -37,6 +40,7 @@
 #include <openssl/obj_mac.h> // for NID_secp192k1
 
 #define BN_OUTPUT_SIZE      (8)
+
 
 static int create_signature(unsigned char* hash)
 {
@@ -69,7 +73,6 @@ static int create_signature(unsigned char* hash)
 		pub_y = BN_new();
 
 #if USE_PREDEFINED_POINTS
-#if USE_192
 		BN_hex2bn(&p,                 "fffffffffffffffffffffffffffffffeffffffffffffffff");
 		printf("P:\t%s \n", BN_bn2hex(p) );
 
@@ -87,31 +90,7 @@ static int create_signature(unsigned char* hash)
 
 		BN_hex2bn(&order,             "FFFFFFFFFFFFFFFFFFFFFFFF99DEF836146BC9B1B4D22831");
 		printf("order:\t%s \n", BN_bn2hex(order) );
-#elif USE_256
-		/* curve points grabbed from Atmel Start example */
 
-		BN_hex2bn(&p,                 "FFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF");
-		printf("P:\t%s \n", BN_bn2hex(p) );
-
-		BN_hex2bn(&a,                 "FFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFC");
-		printf("a:\t%s \n", BN_bn2hex(a) );
-
-		/* b point is not available in Atmel Start project, this point is grabbed from somewhere else */
-		BN_hex2bn(&b,                 "5AC635D8AA3A93E7B3EBBD55769886BC651D06B0CC53B0F63BCE3C3E27D2604B");
-		printf("b:\t%s \n", BN_bn2hex(b) );
-
-		BN_hex2bn(&x,                 "6b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c296");
-		printf("x:\t%s \n", BN_bn2hex(x) );
-
-		BN_hex2bn(&y,                 "4fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5");
-		printf("y:\t%s \n", BN_bn2hex(y) );
-
-		BN_hex2bn(&order,             "ffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551");
-		printf("order:\t%s \n", BN_bn2hex(order) );
-#else
-		fprintf(stderr, "You must define either USE_192 or USE_256\n");
-		goto free;
-#endif //end USE_192
 		group = EC_GROUP_new_curve_GFp(p, a, b, ctx);
 
 
@@ -127,16 +106,9 @@ static int create_signature(unsigned char* hash)
 
 		EC_GROUP_set_generator(group, P, order, BN_value_one());
 		EC_POINT_set_affine_coordinates_GFp(group, P, x, y, ctx);
-#else //non define USE_PREDEFINED_POINTS
+#else // generate group & point 
 
-#if USE_192
 		group= EC_GROUP_new_by_curve_name(NID_secp192k1);
-#elif USE_256
-		group= EC_GROUP_new_by_curve_name(NID_secp256k1);
-#else 
-		fprintf(stderr, "You must define either USE_192 or USE_256\n");
-		goto free;
-#endif // end USE_192
 
 
 #endif
@@ -204,20 +176,14 @@ static int create_signature(unsigned char* hash)
 					}
 				}
 
-#else  // non define GENERATE_KEY, use hardcode key
+#else  // use hardcode key
 
 				private_key = BN_new();
 
-#if USE_256
-				/* private and public keys from Atmel Start project */
-				BN_hex2bn(&private_key, "9043c2ae427713e868d912862c7bbf58611507f730f0360b2d95c9c42da00390");
-				BN_hex2bn(&pub_x,       "23551BC3DB0A2418B010F313959DAB96C0AE9AA43DC742A9B6C8D773E029942A");
-				BN_hex2bn(&pub_y,       "2C712546615518F95B3CE1B1D171623FE689084ACE032852F2E14EA5C43784F5");
-#elif USE_192
 				BN_hex2bn(&private_key, "1A8D598FC15BF0FD89030B5CB1111AEB92AE8BAF5EA475FB");
 				BN_hex2bn(&pub_x,       "62B12D60690CDCF330BABAB6E69763B471F994DD702D16A5");
 				BN_hex2bn(&pub_y,       "63BF5EC08069705FFFF65E5CA5C0D69716DFCB3474373902");
-#endif // USE_256
+
 				EC_KEY_set_private_key(eckey, private_key);
 
 				EC_KEY_set_public_key_affine_coordinates(eckey, pub_x, pub_y);
