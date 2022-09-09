@@ -6,11 +6,11 @@
 
 /*
  * TDX
- * xxd -ps -s 0x302 -l0x180 -i
- * xxd -ps -s 0x482 -l0x40 -i
+ * xxd -ps -s 0x302 -l0x180 -i quote.dat
+ * xxd -ps -s 0x482 -l0x40 -i quote.dat
  * SGX
- * sig: xxd -ps -s 0x3b4 -l0x40 -i 
- * msg: xxd -ps -s 0x234 -l0x180 -i
+ * sig: xxd -ps -s 0x3b4 -l0x40 -i quote.dat
+ * msg: xxd -ps -s 0x234 -l0x180 -i quote.dat
  *
  */
 int main()
@@ -144,8 +144,9 @@ int main()
 		BN_free(bnX);
 		BN_free(bnY);
 		EC_KEY_free(key);
-		BN_free(bnR);
-		BN_free(bnS);
+		// will be free in ECDSA_SIG_free
+//		BN_free(bnR);
+//		BN_free(bnS);
 		EVP_MD_CTX_free(ctx);
 		EVP_PKEY_free(evpKey);
 		EC_POINT_free(point);
