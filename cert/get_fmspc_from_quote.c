@@ -1,5 +1,9 @@
 /**
  * gcc -g fgetline.c -lcrypto -Wall -Wextra -Wformat=2 -Wunused -Wno-unused-parameter -Wshadow
+ * https://www.openssl.org/docs/man1.1.1/man1/openssl-asn1parse.html
+ * https://www.openssl.org/docs/man1.1.1/man3/ASN1_generate_nconf.html
+ * openssl asn1parse -genconf asn1.cnf -noout -out asn1.der
+ * openssl asn1parse -genstr 'UTF8:Hello World'
  */
 
 #include <stdio.h>
