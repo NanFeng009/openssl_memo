@@ -1,3 +1,6 @@
+/**
+ * X509V3_EXT_add_nconf -> X509V3_EXT_add_nconf_sk -> X509V3_EXT_nconf_int -> v3_generic_extension -> generic_asn1 -> ASN1_generate_v3 -> generate_v3 -> asn1_str2type
+ */
 #include <openssl/asn1.h>
 #include <openssl/x509.h>
 
