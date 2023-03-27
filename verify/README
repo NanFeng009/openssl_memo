@@ -72,3 +72,22 @@ openssl x509 -in certificate.pem -pubkey -noout > public_key.pem
 # Verify the signature using the public key
 openssl dgst -sha256 -verify public_key.pem -signature signature.bin message.txt
 ###################################################################################################
+# Generate an ECC key pair using the prime256v1 curve
+openssl ecparam -name prime256v1 -genkey -noout -out ec_key.pem
+
+# Create a self-signed certificate
+openssl req -new -key ec_key.pem -x509 -nodes -days 365 -out ec_cert.pem
+
+# Generate a message
+echo "Hello, world!" > message.txt
+
+# Sign the message with the private key
+openssl dgst -sha256 -sign ec_key.pem -out signature.bin message.txt
+
+# Obtain the public key from the certificate
+openssl x509 -in ec_cert.pem -pubkey -noout > ec_pubkey.pem
+
+# Verify the signature using the public key
+openssl dgst -sha256 -verify ec_pubkey.pem -signature signature.bin message.txt
+###################################################################################################
+
