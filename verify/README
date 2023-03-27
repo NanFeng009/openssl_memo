@@ -56,3 +56,19 @@ openssl verify -crl_check -show_chain -CAfile root_crl.pem intermediate.pem
 #verfiy cert against private key
 openssl rsa -modulus -noout -in key.pem | openssl sha256
 openssl x509 -modulus -noout -in cert.pem | openssl sha256
+###################################################################################################
+# Generate RSA private key and self-signed certificate
+openssl req -newkey rsa:2048 -nodes -keyout private_key.pem -x509 -days 365 -out certificate.pem
+
+# Create a message file
+echo "Hello, world!" > message.txt
+
+# Sign the message using the private key
+openssl dgst -sha256 -sign private_key.pem -out signature.bin message.txt
+
+# Extract the public key from the certificate
+openssl x509 -in certificate.pem -pubkey -noout > public_key.pem
+
+# Verify the signature using the public key
+openssl dgst -sha256 -verify public_key.pem -signature signature.bin message.txt
+###################################################################################################
