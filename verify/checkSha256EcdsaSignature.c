@@ -200,7 +200,7 @@ int main()
 		EVP_MD_CTX_free(ctx);
 		EVP_PKEY_free(evpKey);
 		EC_POINT_free(point);
-		ECDSA_SIG_free(ecdsaSig);
+	//	ECDSA_SIG_free(ecdsaSig);
 		EC_GROUP_free(group);
 
 		return 0;
