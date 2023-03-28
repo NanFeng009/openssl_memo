@@ -5,9 +5,11 @@
 #include <openssl/err.h>
 
 /*
+ * need drop 0x04 before public key
  * TDX
  * xxd -ps -s 0x302 -l0x180 -i quote.dat
  * xxd -ps -s 0x482 -l0x40 -i quote.dat
+ *
  
  * SGX
  ** qe3_report_sig

@@ -5,6 +5,9 @@
 #include <openssl/pem.h>
 #include <openssl/x509.h>
 
+/*
+ * may need padding the signature with 0x00
+ */
 // Path to the x509 certificate file
 const char *cert_path = "./ec_cert.pem";
 
