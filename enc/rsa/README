@@ -1,0 +1,20 @@
+#### Generate a RSA key
+```
+openssl genpkey -algorithm RSA -out key.pem -pkeyopt rsa_keygen_bits:2048
+```
+#### Extract pub key from private key
+```
+openssl rsa -in key.pem -pubout -out pubkey.pem
+```
+#### Generate a plain txt
+```
+echo "hello world">> hello.txt
+```
+#### Encrypt with PUBLIC key
+```
+openssl rsautl -encrypt -pubin -inkey pubkey.pem -in hello.txt -out cipher.txt
+```
+#### Decrypt with PRIVATE key
+```
+openssl rsautl -decrypt -inkey key.pem -in cipher.txt 
+```
